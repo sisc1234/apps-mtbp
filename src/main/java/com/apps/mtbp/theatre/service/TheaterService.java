@@ -35,6 +35,9 @@ public class TheaterService {
 		qMap.put("showDate", showDate);
 
 		List<ShowDto> shows = thtrMapper.getTheatersByMovieAndLocation(qMap);
+		if (shows.isEmpty()) {
+			throw new UserHandleException("No Shows found for movie : " + movieName );
+		}
 		return shows;
 	}
 

@@ -70,12 +70,12 @@
 			 FROM 
 			 	mtbp_thtr_show_l
 			 WHERE 
-			 	show_dt = {#showDate} AND
+			 	show_dt = #{showDate} AND
 				thtr_id in 
 				(
 					SELECT thtr_id from mtbp_thtr_l where location_id in
 					(
-						SELECT location_id from mtbp_locn_location where city = {#location};
+						SELECT location_id from mtbp_locn_location where city = #{location}
 					)	
 				) 
 				
@@ -83,7 +83,7 @@
 
 		WHERE
 			ML.movie_id = SL.movie_id AND
-			ML.movie_NM = {#movieName}
+			ML.movie_NM = #{movieName}
 	</select>
 
 
