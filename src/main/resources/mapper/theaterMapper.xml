@@ -13,7 +13,8 @@
 		<result property="length" column="length" jdbcType="VARCHAR" javaType="java.lang.String" />
 		
 		<result property="showDate" column="show_dt" jdbcType="VARCHAR" javaType="java.lang.String" />
-		<result property="showTime" column="show_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="showTime" column="start_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+		
 	</resultMap>
 
 	<insert id="createShow" parameterType="com.apps.mtbp.theatre.entity.Show">
