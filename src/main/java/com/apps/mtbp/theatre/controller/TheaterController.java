@@ -1,5 +1,6 @@
 package com.apps.mtbp.theatre.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.apps.mtbp.theatre.dto.ShowDto;
-import com.apps.mtbp.theatre.entity.Show;
 import com.apps.mtbp.theatre.service.TheaterService;
+
 import io.swagger.v3.oas.annotations.Operation;
 
 /**
@@ -29,26 +31,23 @@ public class TheaterController {
 	@Autowired
 	private TheaterService theaterService;
 
-	@GetMapping("/theaters/{location}/{movieName}/{showDate}")
-	@Operation(summary = "Get the theators list running particular movie by location")
-	public List<ResponseEntity<Show>> theatersByMovieAndLocation(@PathVariable String location,
-			@PathVariable String movieName, @PathVariable String showDate) {
-
-		return theaterService.getTheatersByMovieAndLocation(location, movieName, showDate);
-	}
-
 	@PostMapping("/show")
 	@Operation(summary = "Create or update movie shows in selected theaters by location")
-	public ResponseEntity<String> createOrUpdateShowForMovieByLocation(@RequestBody ShowDto show) {
-		
+	public ResponseEntity<String> createOrUpdateShowForMovieByLocation(@RequestBody ShowDto show) throws ParseException {
 		return theaterService.createOrUpdateShowForMovieByLocation(show);
 	}
 
 	@DeleteMapping("/show/{showId}")
 	@Operation(summary = "Delete movie shows in selected theators")
 	public ResponseEntity<String> deleteShow(@PathVariable String showId) {
-		
-		return theaterService.deleteShow(showId);
+		return theaterService.deleteShow(Integer.parseInt(showId));
+	}
+
+	@GetMapping("/theaters/{location}/{movieName}/{showDate}")
+	@Operation(summary = "Get the theators list running particular movie by location")
+	public List<ShowDto> theatersByMovieAndLocation(@PathVariable String location, @PathVariable String movieName,
+			@PathVariable String showDate) {
+		return theaterService.getTheatersByMovieAndLocation(location, movieName, showDate);
 	}
 
 }

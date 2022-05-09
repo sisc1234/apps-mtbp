@@ -21,10 +21,10 @@ public class BeansConfig {
 
 		List<Server> servers = new ArrayList<Server>();
 
-		servers.add(new Server().description("Mtbp Local Server").url("http://localhost:8080/"));
+		servers.add(new Server().description("Mtbp Theater Local Server").url("http://localhost:8080/"));
 
 		return new OpenAPI().servers(servers)
-				.info(new Info().title("Mtbp API Specification").version(appVersion)
+				.info(new Info().title("Mtbp Theater API Specification").version(appVersion)
 						.description(appDesciption).termsOfService("http://swagger.io/terms/")
 						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
 	}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apps.mtbp.theatre.mapper.TheatreMapper">
+
+	<resultMap id="showMap" type="com.apps.mtbp.theatre.dto.ShowDto">
+		<result property="showId" column="show_id" jdbcType="INTEGER" javaType="int" />
+		<result property="theaterId" column="thtr_id" jdbcType="INTEGER" javaType="int" />
+		<result property="movieId" column="movie_id" jdbcType="INTEGER" javaType="int" />		
+		
+		<result property="movieName" column="movie_nm" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="language" column="language" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="genre" column="genre" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="length" column="length" jdbcType="VARCHAR" javaType="java.lang.String" />
+		
+		<result property="showDate" column="show_dt" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="showTime" column="show_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<insert id="createShow" parameterType="com.apps.mtbp.theatre.entity.Show">
+		INSERT 
+			INTO
+				mtbp_thtr_show_l (thtr_id, movie_id, show_dt ,start_time )
+			VALUES
+				(#{theaterId}, #{movieId}, #{showDate} , #{showTime})
+	</insert>
+
+	<delete id="deleteShow" parameterType="int">
+		DELETE FROM mtbp_thtr_show_l WHERE show_id = #{showId}
+	</delete>
+
+	<update id="update"
+		parameterType="com.apps.mtbp.theatre.entity.Show">
+		Update
+			mtbp_thtr_show_l
+		SET
+			movie_id=#{movieId} AND
+			show_date=#{showDate} AND
+			show_time=#{showTime}
+		WHERE
+			show_id=#{showId}
+	</update>
+
+
+	<select id="getTheaterId" parameterType="java.lang.String"
+		resultType="int">
+		SELECT
+			thtr_id
+		FROM
+			mtbp_thtr_l
+		WHERE
+			thtr_nm = #{theaterName}
+	</select>
+
+	<select id="getTheatersByMovieAndLocation" parameterType="java.util.Map" resultMap="showMap">
+		SELECT
+			SL.show_id ,
+			SL.thtr_id ,
+			SL.movie_id ,
+			ML.movie_nm ,
+			ML.language,
+			ML.genre,
+			ML.length ,
+			SL.show_dt ,
+			SL.start_time
+
+		FROM
+			mtbp_mvi_movie_l ML ,
+			(SELECT 
+				* 
+			 FROM 
+			 	mtbp_thtr_show_l
+			 WHERE 
+			 	show_dt = {#showDate} AND
+				thtr_id in 
+				(
+					SELECT thtr_id from mtbp_thtr_l where location_id in
+					(
+						SELECT location_id from mtbp_locn_location where city = {#location};
+					)	
+				) 
+				
+			) SL
+
+		WHERE
+			ML.movie_id = SL.movie_id AND
+			ML.movie_NM = {#movieName}
+	</select>
+
+
+</mapper>
